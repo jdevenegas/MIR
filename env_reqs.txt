@@ -1,0 +1,20 @@
+
+
+conda create --name MIR
+conda activate MIR
+ 
+pip install numpy
+pip install pandas
+pip install matplotlib
+pip install jupyter
+pip install -U scikit-learn
+
+pip install spotipy
+pip install tekore
+
+
+MIR client id: 5835805e22a345948373bd954162324c
+sec 825844fb5de94f0986519911292d4e41
+
+
+https://open.spotify.com/playlist/3duYTnAmkLjes0saqaQW1h?si=c7028855187d4c85
