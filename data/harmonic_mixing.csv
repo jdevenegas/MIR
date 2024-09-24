@@ -1,0 +1,25 @@
+﻿key,mode,key_camelot,match ,boost+,boost++,boost+++,drop-,drop--,drop---,pivot
+Ab ,Minor,1A,"1A, 12B","1B, 2A","3A, (8A)",,12A,"11A, (6A)",,4B
+Eb ,Minor,2A,"2A, 1B","2B, 3A","4A, (9A)",,1A,"12A, (7A)",,5B
+Bb ,Minor,3A,"3A, 2B","3B, 4A","5A, (10A)",,2A,"1A, (8A)",,6B
+F ,Minor,4A,"4A, 3B","4B, 5A","6A, (11A)",,3A,"2A, (9A)",,7B
+C ,Minor,5A,"5A, 4B","5B, 6A","7A, (12A)",,4A,"3A, (10A)",,8B
+G ,Minor,6A,"6A, 5B","6B, 7A","8A, (1A)",,5A,"4A, (11A)",,9B
+D ,Minor,7A,"7A, 6B","7B, 8A","9A, (2A)",,6A,"5A, (12A)",,10B
+A ,Minor,8A,"8A, 7B","8B, 9A","10A, (3A)",,7A,"6A, (1A)",,11B
+E ,Minor,9A,"9A, 8B","9B, 10A","11A, (4A)",,8A,"7A, (2A)",,12B
+B ,Minor,10A,"10A, 9B","10B, 11A","12A, (5A)",,9A,"8A, (3A)",,1B
+F# ,Minor,11A,"11A, 10B","11B, 12A","1A, (6A)",,10A,"9A, (4A)",,2B
+Db ,Minor,12A,"12A, 11B","12B, 1A","2A, (7A)",,11A,"10A, (5A)",,3B
+B ,Major ,1B,"1B, 2A","2B, 3B",(8B),,"1A, 12B",,,10A
+F# ,Major ,2B,"2B, 3A","3B, 4B",(9B),,"2A, 1A",,,11A
+Db ,Major ,3B,"3B, 4A","4B, 5B",(10B),,"3A, 2A",,,12A
+Ab ,Major ,4B,"4B, 5A","5B, 6B",(11B),,"4A, 3A",,,1A
+Eb ,Major ,5B,"5B, 6A","6B, 7B",(12B),,"5A, 4A",,,2A
+Bb ,Major ,6B,"6B, 7A","7B, 8B",(1B),,"6A, 5A",,,3A
+F ,Major ,7B,"7B, 8A","8B, 9B",(2B),,"7A, 6A",,,4A
+C ,Major ,8B,"8B, 9A","9B, 10B",(3B),,"8A, 7A",,,5A
+G ,Major ,9B,"9B, 10A","10B, 11B",(4B),,"9A, 8A",,,6A
+D ,Major ,10B,"10B, 11A","11B, 12B",(5B),,"10A, 9A",,,7A
+A ,Major ,11B,"11B, 12A","12B, 1B",(6B),,"11A, 10A",,,8A
+E ,Major ,12B,"12B, 1A","1B, 2B",(7B),,"12A, 11A",,,9A

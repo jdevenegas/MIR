@@ -9,6 +9,7 @@ pip install matplotlib
 pip install jupyter
 pip install -U scikit-learn
 
+pip install python-dotenv
 pip install spotipy
 pip install tekore
 

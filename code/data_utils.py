@@ -15,7 +15,7 @@ CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 print(CLIENT_ID, CLIENT_SECRET)
 
-ROOT_API_URL = "https://api.spotify.com/v1"
+ROOT_API_URL = "https://api.spotify.com/v1/"
 
 
 
@@ -87,16 +87,69 @@ def get_artist_albums(token, artist_id, offset=0, limit=None):
     js_result = json.loads(result.content)
     return js_result['items']
 
-def get_album_tracks(token, album_id, offset=0, limit=None):
-    if limit is not None:
-        url = os.path.join(ROOT_API_URL, f"albums/{album_id}/tracks?offset={offset}&limit={limit}")
-    else:
-        url = os.path.join(ROOT_API_URL, f"albums/{album_id}/tracks?offset={offset}")
+# def get_album_tracks(token, album_id, offset=0, limit=None):
+#     if limit is not None:
+#         url = os.path.join(ROOT_API_URL, f"albums/{album_id}/tracks?offset={offset}&limit={limit}")
+#     else:
+#         url = os.path.join(ROOT_API_URL, f"albums/{album_id}/tracks?offset={offset}")
+#     headers = get_auth_header(token)
+#     result = get(url, headers=headers)
+#     js_result = json.loads(result.content)
+#     return js_result['items']
+
+def get_album_tracks(token, album_id, summarize=False):
+    url = os.path.join(ROOT_API_URL, f"albums/{album_id}/tracks")
     headers = get_auth_header(token)
     result = get(url, headers=headers)
     js_result = json.loads(result.content)
-    return js_result['items']
+    # print(js_result)
+    tracks_info = js_result['items']
+    # track_name = [t['name'] for t in tracks_info]
+    # track_id = [t['id'] for t in tracks_info]
+    track_artists = [t['artists'] for t in tracks_info]
     
+    if summarize:
+        select_track_keys = ['name', 'id']
+        select_artist_keys = ['name', 'id']
+        track_ls = [{'track_%s'%k: t[k] for k in select_track_keys} for t in tracks_info]
+        artist_ls = [{'artist_%s'%k: a[0][k] for k in select_artist_keys} for a in track_artists]
+            
+        tracks_info = pd.DataFrame([{**a, **t} for a, t in zip(artist_ls, track_ls)])
+    return tracks_info
+
+
+def get_artist_tracks(token, artist_id, live_tracks=True):
+    tracks = []
+    offset = 0
+    limit = 50
+
+    sleep_min = 1
+    sleep_max = 4
+    start_time = time.time()
+    
+    album_info = get_artist_albums(token, artist_id, offset=offset, limit=limit)
+    while len(album_info)>0:
+        print(offset)
+        album_name_ls = [a['name'] for a in album_info]
+        album_id_ls = [a['id'] for a in album_info]
+        tracks += [get_album_tracks(token, album_id, summarize=True) for album_id in album_id_ls]
+
+        r_val = np.random.uniform(sleep_min, sleep_max)
+        print(f'Next request in ~ {int(np.round(r_val))} seconds')
+        time.sleep(r_val)
+        print('Elapsed Time: {} seconds'.format(time.time() - start_time))
+        
+        offset+=limit
+        album_info = get_artist_albums(token, artist_id, offset=offset, limit=limit)
+        print('Getting next %d tracks'%len(album_info))
+        
+    tracks_df = pd.concat(tracks, axis=0)
+    if not live_tracks:
+        tracks_df = tracks_df[~tracks_df.track_name.str.contains("\(Live\)")].reset_index(drop=True)
+        tracks_df = tracks_df[~tracks_df.track_name.str.contains("- Live")].reset_index(drop=True)
+    return tracks_df
+
+
 def get_playlist_tracks(token, playlist_id, summarize=False):
     tracks_info = []
     playlist_info = get_playlist(token, playlist_id, offset=0)
@@ -161,6 +214,19 @@ def get_audio_features(token, track_ids):
     # else:
     #     return [t for t in audio_features_ls]
 
+def get_full_audio_analysis(token, track_ids, track_names=None, sleep_range=(1,5)):
+    headers = get_auth_header(token)
+    sleep_min = sleep_range[0]
+    sleep_max = sleep_range[1]
+    start_time = time.time()
+    track_count = 0
+    audio_analysis_ls = []
+    for i, t_id in enumerate(track_ids):
+        url = f'https://api.spotify.com/v1/audio-analysis/{t_id}'
+        result = get(url, headers=headers)
+        js_result = json.loads(result.content)['segments']
+        print(len(audio_analysis_ls))
+        
 def get_audio_analysis(token, track_ids, track_names=None, sleep_range=(1,5)):
     headers = get_auth_header(token)
     sleep_min = sleep_range[0]
@@ -196,7 +262,7 @@ def get_audio_analysis(token, track_ids, track_names=None, sleep_range=(1,5)):
             audio_df.insert(0, 'track_id', t_id)
             audio_df.insert(0, 'track_name', t_name)
     else:
-        for t_id, t_name, audio_df in zip(track_ids, audio_analysis_ls):
+        for t_id, audio_df in zip(track_ids, audio_analysis_ls):
             audio_df.insert(0, 'track_id', t_id)
             
     audio_analysis_df = pd.concat(audio_analysis_ls, axis=0).reset_index(drop=True)
