@@ -11,5 +11,3 @@ https://medium.com/@maxtingle/getting-started-with-spotifys-api-spotipy-197c3dc6
 https://www.lawtonhall.com/blog/euclidean-rhythms-pt1
 
 https://archive.bridgesmathart.org/2005/bridges2005-47.pdf
-
-MIR tkn: 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
